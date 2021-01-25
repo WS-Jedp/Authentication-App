@@ -28,12 +28,12 @@ export const ButtonSocialWrapper = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   border: 1px solid rgba(0,0,0,.3);
   border-radius: 50%;
-  background-color: '#fff';
-  color: '#fff';
+  background-color: #fff;
+  color: rgba(0,0,0,.4);
   cursor: pointer;
   transition: .3s ease-in-out;
   margin: 9px;

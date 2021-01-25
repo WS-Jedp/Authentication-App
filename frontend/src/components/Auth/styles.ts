@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const AuthLoginWrapper = styled.div`
+export const AuthWrapper = styled.div`
   position: relative;
   width: 100%;
   display: flex;
@@ -23,11 +23,33 @@ export const AuthLoginWrapper = styled.div`
     font-weight: 100;
     font-size: .8rem;
     color: rgba(0,0,0,.4);
-  }
 
-  & .header {
-    display: flex; 
+    & a {
+      color: #3292d3;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+`
+
+export const OptionsWrapper = styled.div`
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  margin: auto;
+  margin: 12px 0;
+
+  &.social-media-options {
+    position: relative;
+    display: flex;
     flex-flow: row nowrap;
     align-items: center;
+    justify-content: center;
+    width: 100%;
   }
 `
