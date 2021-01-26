@@ -33,6 +33,12 @@ export const AuthLogin:React.FC = () => {
               <ButtonSocial>
                 FB
               </ButtonSocial>
+              <ButtonSocial>
+                GO
+              </ButtonSocial>
+              <ButtonSocial>
+                TW
+              </ButtonSocial>
             </div>
 
             <span>

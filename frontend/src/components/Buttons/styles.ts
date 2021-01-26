@@ -1,12 +1,13 @@
 import styled, { StyleSheetManagerProps } from 'styled-components'
 
 interface PropsButton extends StyleSheetManagerProps {
-  primary: Boolean;
+  primary?: Boolean;
+  width?: String;
 }
 
 export const ButtonWrapper = styled.button`
   min-width: 210px;
-  width: 100%;
+  width: ${(props:PropsButton) => props.width ? `${props.width}` : '100%'};
   min-height: 30px;
   height: 40px;
   border: none;
@@ -40,5 +41,25 @@ export const ButtonSocialWrapper = styled.button`
 
   &:hover {
     opacity: .8;
+  }
+`
+
+export const MenuButtonWrapper = styled.button`
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+  width: auto;
+  min-height: 40px;
+  height: auto;
+  background-color: #fff;
+  border: none;
+  padding: 9px;
+  transition: .3s ease-in-out;
+  cursor: pointer;
+  border-radius: 9px;
+
+  &:hover {
+    background-color: rgba(0,0,0,.1);
   }
 `

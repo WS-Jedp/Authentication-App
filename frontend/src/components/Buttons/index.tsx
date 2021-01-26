@@ -4,14 +4,15 @@ import { ButtonWrapper } from './styles'
 
 type PropsButton = {
   content: string;
+  width?: string;
   onClick?: Function;
-  primary: Boolean;
+  primary?: Boolean;
 }
 
-export const Button = ({content, onClick, primary}:PropsButton) => {
+export const Button = ({content, onClick, primary, width}:PropsButton) => {
   
   return (
-    <ButtonWrapper primary={primary}>
+    <ButtonWrapper primary={primary} width={width}>
         {
           content
         }

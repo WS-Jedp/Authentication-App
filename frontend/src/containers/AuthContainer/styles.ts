@@ -9,7 +9,6 @@ export const AuthWrapper = styled.article`
   width: 30%;
   min-height: 400px;
   height: 70vh;
-  background-color: '#fff';
   box-shadow: 0 0 19px 1px rgba(0,0,0,0.05);
   border-radius: 6px;
 `

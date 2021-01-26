@@ -44,7 +44,7 @@ export const OptionsWrapper = styled.div`
   margin: auto;
   margin: 12px 0;
 
-  &.social-media-options {
+  & .social-media-options {
     position: relative;
     display: flex;
     flex-flow: row nowrap;

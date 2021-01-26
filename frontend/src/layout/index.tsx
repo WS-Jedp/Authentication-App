@@ -1,13 +1,25 @@
 import React from 'react'
 import { Layout as LayoutComponent } from './styles'
 
-export const Layout:React.FC = ({ children }) => {
+import { Header } from '../components/Header'
+
+type LayoutProps = {
+  children: React.ReactNode;
+  header?: Boolean;
+}
+
+export const Layout = ({ children, header }:LayoutProps) => {
 
   return (
-    <LayoutComponent>
+    <LayoutComponent header={header}>
       {
-        children
+        header && (<Header />) 
       }
+      <div className="layout-content">
+        {
+          children
+        }
+      </div>
     </LayoutComponent>
   )
 }
