@@ -9,14 +9,19 @@ class Response {
 
 
   public function __construct($data, $type)
-  {
+  {    
     $this->data = $data;
     $this->type = $type;
+
+    var_dump($this->data);
+
   }
 
   private function getJson(){
-    $json = $this->data;
-    header("Content-Type:application/json;charset=utf-8");
+    $json = $this->data;    
+    var_dump($this->data);
+    die();
+    
     return $json;
   }
 
@@ -25,7 +30,7 @@ class Response {
       case 'json':
         return $this->getJson();      
       default:
-        return $this->getJson();
+        return "Bad type of request!";
 
     }
   }

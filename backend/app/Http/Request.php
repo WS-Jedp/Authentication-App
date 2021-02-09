@@ -15,6 +15,8 @@ class Request {
     $this->setController();
     $this->setMethod();
     $this->setParam();
+
+    $this->send();
   }
 
   protected function setController()
@@ -27,12 +29,17 @@ class Request {
   }
   protected function setParam()
   {
-    $this->parameter = empty($this->segments[3] ? NULL : $this->segments[3]);
+    if($this->segments[3]) {
+      $this->parameter = empty($this->segments[3]) ? NULL : $this->segments[3];
+    }
   }
 
   public function getController() {
     $controller = ucfirst($this->controller);
-    return "App\Http\Controller\\{$controller}Controller";
+    // if($controller === "Api") {
+    //   return "App\Http\Api\ApiController"; 
+    // }
+    return "App\Http\Controllers\\{$controller}Controller";
   }
   public function getMethod() {
     return ucfirst($this->method);
@@ -47,5 +54,7 @@ class Request {
       new $controller,
       $method
     ], $parameter);
+
+    $response->send();
   }
 }
