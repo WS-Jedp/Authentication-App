@@ -12,26 +12,20 @@ class Response {
   {    
     $this->data = $data;
     $this->type = $type;
-
-    var_dump($this->data);
-
   }
 
   private function getJson(){
-    $json = $this->data;    
-    var_dump($this->data);
-    die();
-    
+    header("Content-Type:application\json;charset=utf-8");
+    $json = $this->data;        
     return $json;
   }
 
   private function setResponseType() {
     switch ($this->type) {
       case 'json':
-        return $this->getJson();      
+        echo $this->getJson();      
       default:
         return "Bad type of request!";
-
     }
   }
 

@@ -22,17 +22,18 @@ class UserModel {
       $columns = ["id", "email", "password"];
       $condition = ["email" => $email];
 
-      $user = $this->database->getAll($this->table, $columns, $condition);
-      
+      $user = $this->database->getLogin($this->table, $columns, $condition);
       if($user[0]["password"] === $password) {
-          unset($user["pasword"]);
-          return $user[0];
+          $data = [
+            "id" => $user[0]["id"],
+            "email" => $user[0]["email"]
+          ];
+          return $data;
       } else {
         return false;
       }
-    } catch(\Throwable $th) {
-      $error = new ErrorReport("Auth Error, the information given is wrong! -> " . $th->getMessage());
-      return $error->normal();
+    } catch(\Exception $th) {
+      throw new \Exception($th->getMessage());
     }
     
   }
@@ -41,12 +42,10 @@ class UserModel {
     
     try {
       $result = $this->database->getOne($this->table, $this->columns, $id);
-
       return $result;
 
-    } catch(\Throwable $err) {
-      $error = new ErrorReport("Something went wrong! -> " . $err->getMessage());
-      return $error->normal();
+    } catch(\Exception $ex) {
+      throw new \Exception($ex->getMessage());
     }
   }
 
@@ -70,8 +69,8 @@ class UserModel {
       ];
 
       return $json;
-    } catch (\Throwable $th) {
-      $error = new ErrorReport("We can't create the user -> " . $th->getMessage());
+    } catch (\Exception $ex) {
+      $error = new ErrorReport("We can't create the user -> " . $ex->getMessage());
       return $error->database();
     }
   }

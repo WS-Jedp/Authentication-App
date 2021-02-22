@@ -6,16 +6,17 @@ use Models\UserModel;
 
 class ApiController {
   public function user($id){
-
     $model = new UserModel();
-    $user = $model->getOne($id);
-
-    $json = [
-      "status" => 200,
-      "data" => [
-        "user" => $user
-      ]
-    ];
-    return new Response(json_encode($json), "json");
+    try {
+      $user = $model->getOne($id);
+      $json = [
+        "status" => 200,
+        "data" => $user[0]
+      ];
+      return new Response(json_encode($json), "json");
+      
+    } catch(\Exception $err) {
+      return $err;
+    }
   }
 }

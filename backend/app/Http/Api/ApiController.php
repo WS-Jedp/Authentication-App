@@ -10,12 +10,15 @@ class ApiController {
     $model = new UserModel();
     $user = $model->getOne($id);
 
-    $json = [
-      "status" => 200,
-      "data" => [
-        "user" => $user
-      ]
-    ];
-    return new Response(json_encode($json), "json");
+    if($user)
+    {
+      $json = [
+        "status" => 200,
+        "data" => [
+          "user" => $user
+        ]
+      ];
+      return new Response(json_encode($json), "json");
+    }
   }
 }

@@ -36,9 +36,6 @@ class Request {
 
   public function getController() {
     $controller = ucfirst($this->controller);
-    // if($controller === "Api") {
-    //   return "App\Http\Api\ApiController"; 
-    // }
     return "App\Http\Controllers\\{$controller}Controller";
   }
   public function getMethod() {

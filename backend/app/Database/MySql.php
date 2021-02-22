@@ -22,20 +22,32 @@ class MySql {
 
   protected function createColumnsStatements($columns) {
     $columns_statment = "";
+    $length = count($columns) - 1;
     for ($i=0; $i < count($columns); $i++) { 
       $columns_statment .= "$columns[$i]";
-      if(!$i == count($columns)) {
-        $columns_statment .= ", ";
+      if($i != $length) {
+        $columns_statment .= ",";
       }
-    }
-    
+    }    
     return $columns_statment;
   }
 
   protected function createConditionStatement($conditions) {
     $conditions_statement = "";
+    $length = count($conditions);
     foreach ($conditions as $key => $value) {
-      $conditions_statement .= "$key=$value,";
+      $conditions_statement .= "$key='$value'";
+      if($conditions[$length - 1] != $value) {
+        $conditions_statement .= ",";
+      }
+    }
+    return $conditions_statement;
+  }
+
+  protected function conditionEmail($conditions) {
+    $conditions_statement = "";
+    foreach ($conditions as $key => $value) {
+      $conditions_statement .= "$key='$value'";
     }
     return $conditions_statement;
   }
@@ -49,7 +61,7 @@ class MySql {
 
       return true;
 
-    } catch(Exception $exception) {
+    } catch(\Exception $exception) {
       
       $error = new ErrorReport("Something went wrong in the connection -> " . $exception->getMessage());
       return $error->database();
@@ -69,15 +81,10 @@ class MySql {
 
     $columns_statment = $this->createColumnsStatements($columns);
     
-    
     $result = $this->database->query("SELECT $columns_statment FROM $table WHERE id=$id");
 
-    // var_dump($this->database->error);
-    // die();
-
     if($this->database->error) {
-      $error = new ErrorReport("We can't found the id $id in our Database");
-      return $error->database();
+      throw new Exception("Something went wrong! -> " . $this->database->error);
     }
 
     $data = [];
@@ -106,8 +113,39 @@ class MySql {
     $result = $this->database->query($statement);
 
     if($this->database->error) {
-      $error = new ErrorReport("Something went wrong in the query -> " . $this->database->error);
-      return $error->database();
+      throw new \Exception("Something went wrong in the query -> " . $this->database->error);
+    }
+
+    $data = [];
+    if($result->num_rows > 0)
+    {
+      while($row = $result->fetch_assoc())
+      {
+        array_push($data, $row);
+      }
+    }
+
+    return $data;
+  }
+
+  public function getLogin($table, $columns, $condition = NULL) {
+    if(!$this->connected)
+    {
+      $this->connect();
+    }
+
+    $columns_statment = $this->createColumnsStatements($columns);
+
+    $statement = "SELECT $columns_statment FROM $table";
+    if($condition) {
+      $conditions = $this->conditionEmail($condition);
+      $statement .= " WHERE $conditions";
+    }
+
+    $result = $this->database->query($statement);
+
+    if($this->database->error) {
+      throw new \Exception("Something went wrong in the query -> " . $this->database->error);
     }
 
     $data = [];
