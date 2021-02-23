@@ -50,7 +50,6 @@ class UserModel {
   }
 
   public function createOne($data){
-    global $json;
     try {
       $columns = [];
       $values = [];
@@ -61,19 +60,29 @@ class UserModel {
       }
 
       $id = $this->database->createOne($this->table, $columns, $values);
-      $json = [
-        "status" => 201,
-        "data" => [
-          "id" => $id
-        ],
-      ];
-
-      return $json;
+      return $id;
     } catch (\Exception $ex) {
-      $error = new ErrorReport("We can't create the user -> " . $ex->getMessage());
-      return $error->database();
+      throw new \Exception("We can't create the user -> " . $ex->getMessage());
     }
   }
 
-  public function deleteOne(){}
+  public function deleteOne($id){
+    try {
+
+      $user = $this->getOne($id);
+      $deleted = $this->database->deleteOne($this->table ,$id);
+
+      $data = [
+        "data" => [
+          "user" => $user,
+          "deleted" => $deleted
+        ]
+      ];
+
+      return $data;
+
+    } catch(\Exception $err) {
+      throw new \Exception($err->getMessage());
+    }
+  }
 } 

@@ -27,7 +27,7 @@ class ErrorReport {
   {
     $json = [
       "message" => $this->message,
-      "status" => 401,
+      "status" => 404,
       "where" => "database"
     ];
     return new Response(json_encode($json), $this->type);
@@ -41,5 +41,16 @@ class ErrorReport {
     ];
     http_response_code(501);
     return new Response(json_encode($json), $this->type);
+  }
+
+  public function unauthorized()
+  {
+    $json = [
+      "message" => $this->message,
+      "status" => 401
+    ];
+
+    http_response_code(401);
+    return new Response(json_encode($json), "json");
   }
 }

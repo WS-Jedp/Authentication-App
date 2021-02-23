@@ -32,6 +32,18 @@ class MySql {
     return $columns_statment;
   }
 
+  protected function createValuesStatements($columns) {
+    $columns_statment = "";
+    $length = count($columns) - 1;
+    for ($i=0; $i < count($columns); $i++) { 
+      $columns_statment .= "'$columns[$i]'";
+      if($i != $length) {
+        $columns_statment .= ",";
+      }
+    }    
+    return $columns_statment;
+  }
+
   protected function createConditionStatement($conditions) {
     $conditions_statement = "";
     $length = count($conditions);
@@ -166,17 +178,29 @@ class MySql {
     }
 
     $columns_statment = $this->createColumnsStatements($columns);
-    $values_statement = $this->createColumnsStatements($values);
-    $result = $this->database->query("INSERT INTO $table ($columns_statment) VALUES ('$values_statement')");
+    $values_statement = $this->createValuesStatements($values);
+    $result = $this->database->query("INSERT INTO $table ($columns_statment) VALUES ($values_statement)");
     if($result  === TRUE) {
       $last_id = $this->database->insert_id;
       return $last_id; 
     } else if($this->database->error) {
-      $error = new ErrorReport("We can't create the user! -> " . $this->database->error);
-      return $error->database();
+      throw new \Exception("We can't create the user -> " . $this->database->error);
     }
      
   }
 
-  public function deleteOne(){}
+  public function deleteOne($table, $id)
+  {
+    if(!$this->connected) {
+      $this->connect();
+    }
+
+    $result = $this->database->query("DELETE FROM $table WHERE id='$id'");
+
+    if($this->database->error) {
+      throw new \Exception("We can't delete the user -> " . $this->database->error);
+    }
+
+    return $result;
+  }
 }

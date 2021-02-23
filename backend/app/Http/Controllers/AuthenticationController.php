@@ -24,6 +24,7 @@ class AuthenticationController {
 
         $email = $_POST["email"];
         $password = $_POST["password"];
+        $now = (new \DateTime('now'))->getTimestamp();
 
         $user = $this->userModel->login($email, $password);
         $json = [];
@@ -34,7 +35,7 @@ class AuthenticationController {
           $payload = [
             "id" => $user["id"],
             "email" => $user["email"],
-            "exp" => 159382822200
+            "exp" => $now + 5000
           ];
           $token = $JWT->create($payload);
 
@@ -68,16 +69,100 @@ class AuthenticationController {
 
   public function Register() {
 
+    if($_SERVER["REQUEST_METHOD"] === "POST" || $_SERVER["REQUEST_METHOD"] === "post") {
+
+      $requiredColumns = ["name", "username", "email", "description", "age", "password"];
+
+      for($i = 0; $i < count($requiredColumns); $i++) {
+        if(!array_key_exists($requiredColumns[$i], $_POST)) {
+          $error = new ErrorReport("Miss the value of '$requiredColumns[$i]'");
+          return $error->normal();
+        }
+      } 
+
+      $data = [
+        "name" => $_POST["name"],
+        "username" => $_POST["username"],
+        "email" => $_POST["email"],
+        "description" => $_POST["description"],
+        "age" => $_POST["age"],
+        "password" => $_POST["password"]
+      ];
+
+      try {
+  
+      $id = $this->userModel->createOne($data);
+            
+      $json = [
+        "status" => 201,
+        "data" => [
+          "id" => $id
+        ]
+      ];
+      return new Response(json_encode($json), "json");
+  
+      } catch(\Exception $err) {
+          $error = new ErrorReport("Register Error -> " . $err->getMessage());
+          return $error->normal();
+      }
+
+    } else {
+      $error = new ErrorReport("Bad Request");
+      return $error->badRequest();
+    }
+  }
+
+  public function Logout() {
+      try {
+        if(empty($_COOKIE["token"])) {
+          throw new \Exception("There is no token to invalid!");
+        }
+
+        $token = $_COOKIE["token"];
+        $JWT = new TokenJWT();
+        $invalidToken = $JWT->delete($token);
+
+        $json = [
+          "status" => 200,
+          "data" => [
+            "invalid_token" => $invalidToken
+          ]
+        ];
+
+        return new Response(json_encode($json), "json");
+
+      } catch(\Exception $err) {
+        $error = new ErrorReport("Something went wrong -> " . $err->getMessage());
+        return $error->normal();
+      }
     
     $json = [];
     return new Response(json_encode($json), "json");
   }
 
-  public function Logout() {
+  public function delete($id) 
+  {
+    if($_SERVER["REQUEST_METHOD"] === "GET" || $_SERVER["REQUEST_METHOD"] === "get")
+    {
+      try {
 
-    
-    $json = [];
-    return new Response(json_encode($json), "json");
+        $data = $this->userModel->deleteOne($id);
+        $json = [
+          "status" => 200,
+          "data" => $data
+        ];
+
+        return new Response(json_encode($json), "json");
+        
+      } catch(\Exception $err) {
+        $error = new ErrorReport("We can't delete the user -> " . $err->getMessage());
+        return $error->badRequest();
+      }
+    } else {
+      $error = new ErrorReport("Bad method request!");
+      return $error->badRequest();
+    }
+
   }
 
 }

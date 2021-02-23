@@ -39,7 +39,32 @@ class TokenJWT {
 
 
   public function update(){}
-  public function delete(){}
+  
+  public function delete($token)
+  {
+
+    $expired = $this->verify($token);
+    if($expired) {
+      throw new \Exception("Token is expired!");
+    }
+
+    $token_parts = explode(".", $token);
+    $header = base64_decode($token_parts[0]);
+    $payload = base64_decode($token_parts[1]);
+    $signature = $token_parts[2];
+
+    $new_payload = json_decode($payload);
+    $new_payload->exp = 0;
+
+    $headerEncoded = base64_encode($header);
+    $payloadEncoded = base64_encode($payload);
+    $new_signature = hash_hmac('sha256', $headerEncoded . "." . $payloadEncoded, $this->secret, true);
+
+    $newToken = $this->base64UrlEncode($new_signature);
+
+    return $newToken;
+  }
+
   public function verify($token)
   {
     $token_parts = explode(".", $token);
@@ -52,8 +77,6 @@ class TokenJWT {
     $expiration = $this->isTokenExpired($tokenTime);
 
     if($expiration) {
-      var_dump($expiration);
-      die();
       throw new \Exception("Token is expired!");
     }
 
