@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { RouteComponentProps } from '@reach/router'
 
 import { HomeHeaderWrapper } from './styles'
@@ -8,7 +8,6 @@ import { Personal } from '../../components/Personal'
 import { ErrorReport } from '../../components/Modals/ErrorReport'
 
 export const Home = (props:RouteComponentProps ) => {
-
   return (
     <Layout header={true}>
       <HomeHeaderWrapper>

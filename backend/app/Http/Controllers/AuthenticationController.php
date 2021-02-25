@@ -15,10 +15,23 @@ class AuthenticationController {
   public function __construct()
   {
     $this->userModel = new UserModel();
+
+    header("Access-Control-Allow-Origin: http://localhost:8080");
+    header('Access-Control-Allow-Credentials: false');
+    header("Access-Control-Allow-Methods: GET | POST");
   }
 
   public function Login() {
     if($_SERVER["REQUEST_METHOD"] === "POST" || $_SERVER["REQUEST_METHOD"] === "post") {
+
+      $requiredColumns = ["email", "password"];
+
+      for($i = 0; $i < count($requiredColumns); $i++) {
+        if(!array_key_exists($requiredColumns[$i], $_POST)) {
+          $error = new ErrorReport("Miss the value of '$requiredColumns[$i]'");
+          return $error->normal();
+        }
+      } 
 
       try {
 

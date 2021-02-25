@@ -7,6 +7,14 @@ use Helpers\ErrorReport;
 use Helpers\TokenJWT;
 
 class ApiController {
+
+  public function __construct()
+  {
+    header("Access-Control-Allow-Origin: http://localhost:8080");
+    header('Access-Control-Allow-Credentials: false');
+    header("Access-Control-Allow-Methods: GET");
+  }
+
   public function user($id){
     try {
       $JWT = new TokenJWT();

@@ -5,14 +5,16 @@ import { ButtonWrapper } from './styles'
 type PropsButton = {
   content: string;
   width?: string;
-  onClick?: Function;
+  onAction?: () => {};
   primary?: Boolean;
 }
 
-export const Button = ({content, onClick, primary, width}:PropsButton) => {
+export const Button = (props:PropsButton) => {
+
+  const { content, primary, width, onAction } = props
   
   return (
-    <ButtonWrapper primary={primary} width={width}>
+    <ButtonWrapper primary={primary} width={width} onClick={onAction}>
         {
           content
         }

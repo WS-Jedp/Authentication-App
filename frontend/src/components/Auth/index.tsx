@@ -1,7 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from '@reach/router'
 import { MdMail, MdLock } from 'react-icons/md'
-import { FcCdLogo } from 'react-icons/fc'
 
 import { AuthContainer } from '../../containers/AuthContainer'
 import { AuthWrapper, OptionsWrapper } from './styles'
@@ -10,7 +9,33 @@ import { InputText } from '../Inputs/InputText'
 import { Button } from '../Buttons'
 import { ButtonSocial } from '../Buttons/SocialButton'
 
-export const AuthLogin:React.FC = () => {
+interface PropsAuth {
+  children?: React.ReactNode;
+  onSubmit: any;
+  setData: any;
+}
+
+export const AuthLogin = (props: PropsAuth) => {
+
+  const { onSubmit, setData } = props
+
+  const [email, setEmail] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
+
+  const onEmail = (ev) => {
+    setEmail(ev.currentTarget.value)
+  }
+  const onPassword = (ev) => {
+    setPassword(ev.currentTarget.value)
+  }
+
+  const onLogin = async () => {
+    setData({
+      email,
+      password
+    })
+    await onSubmit()
+  }
 
   return (
     <AuthContainer>
@@ -19,9 +44,9 @@ export const AuthLogin:React.FC = () => {
           <h1>
             Login
           </h1>
-          <InputText type="text" placeholder="Email" Icon={MdMail} />
-          <InputText type="password" placeholder="Password" Icon={MdLock} />
-          <Button primary={true} content="Login" />
+          <InputText type="text" placeholder="Email" Icon={MdMail} id="email" name="email" handleInput={onEmail} value={email}/>
+          <InputText type="password" placeholder="Password" id="password" name="password" Icon={MdLock} handleInput={onPassword} value={password} />
+          <Button primary={true} content="Login" onAction={onLogin}/>
 
 
         <OptionsWrapper>
