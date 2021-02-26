@@ -25,7 +25,6 @@ class AuthenticationController {
     if($_SERVER["REQUEST_METHOD"] === "POST" || $_SERVER["REQUEST_METHOD"] === "post") {
 
       $requiredColumns = ["email", "password"];
-
       for($i = 0; $i < count($requiredColumns); $i++) {
         if(!array_key_exists($requiredColumns[$i], $_POST)) {
           $error = new ErrorReport("Miss the value of '$requiredColumns[$i]'");
@@ -34,7 +33,6 @@ class AuthenticationController {
       } 
 
       try {
-
         $email = $_POST["email"];
         $password = $_POST["password"];
         $now = (new \DateTime('now'))->getTimestamp();
@@ -59,6 +57,10 @@ class AuthenticationController {
               "token" => $token
             ]
           ];
+          setcookie('token', $token, [
+            "httponly" => false,
+            "secure" => false
+          ]);
         } else {
           $json = [
             "status" => 401,

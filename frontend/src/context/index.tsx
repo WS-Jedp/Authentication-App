@@ -1,11 +1,11 @@
 import React, { createContext, useState } from 'react'
+import { User } from '../components/User'
 
-type UserType = {
+interface User {
   name?: string;
   email?: string;
-  age?: Number;
-  photo?: string;
-  phone?: string;
+  username?: string;
+  description?: string;
 }
 
 type InitialState = {
@@ -17,7 +17,8 @@ type InitialState = {
   setId: Function;
   errors: any[];
   addError: Function;
-  user: UserType;
+  user: User;
+  setUser: Function
 }
 
 const state:InitialState = {
@@ -29,15 +30,16 @@ const state:InitialState = {
   setId: () => {},
   errors: [],
   addError: () => {},
-  user: {}
+  user: {},
+  setUser: () => {}
 }
 
 export const Context = createContext<InitialState>(state)
 
 export const Provider:React.FC = ({ children }) => {
 
-  const [id, setId] = useState<Number>(0)
-  const [user, setUser] = useState<UserType>({})
+  const [id, setId] = useState<Number | null>(null)
+  const [user, setUser] = useState<User>({})
   const [auth, setAuth] = useState<Boolean>(false)
   const [theme, setTheme] = useState<Boolean>(false) 
   const [errors, setErrors] = useState<any[]>([]) 
@@ -47,6 +49,7 @@ export const Provider:React.FC = ({ children }) => {
   const state:InitialState = {
     id,
     user,
+    setUser,
     setId,
     auth,
     setAuth,

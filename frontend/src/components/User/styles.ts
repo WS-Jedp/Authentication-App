@@ -12,6 +12,7 @@ export const UserWrapper = styled.div`
   flex-flow: row nowrap;
   align-items: center;
   cursor: pointer;
+  z-index: 99;
 
   & image {
     width: ${ (props:PropsUserWrapper) => props.width ? `${props.width}` : '36px'};

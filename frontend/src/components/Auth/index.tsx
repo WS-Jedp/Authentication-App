@@ -9,32 +9,29 @@ import { InputText } from '../Inputs/InputText'
 import { Button } from '../Buttons'
 import { ButtonSocial } from '../Buttons/SocialButton'
 
+interface PersonLogin {
+  email?: string;
+  password?: string;
+}
+
 interface PropsAuth {
   children?: React.ReactNode;
   onSubmit: any;
-  setData: any;
+  setEmail: (prev:any) => void;
+  setPassword: (prev:any) => void;
+  data: PersonLogin
 }
 
 export const AuthLogin = (props: PropsAuth) => {
 
-  const { onSubmit, setData } = props
+  const { onSubmit, setEmail, setPassword, data } = props
 
-  const [email, setEmail] = useState<string>('')
-  const [password, setPassword] = useState<string>('')
 
   const onEmail = (ev) => {
     setEmail(ev.currentTarget.value)
   }
   const onPassword = (ev) => {
     setPassword(ev.currentTarget.value)
-  }
-
-  const onLogin = async () => {
-    setData({
-      email,
-      password
-    })
-    await onSubmit()
   }
 
   return (
@@ -44,9 +41,9 @@ export const AuthLogin = (props: PropsAuth) => {
           <h1>
             Login
           </h1>
-          <InputText type="text" placeholder="Email" Icon={MdMail} id="email" name="email" handleInput={onEmail} value={email}/>
-          <InputText type="password" placeholder="Password" id="password" name="password" Icon={MdLock} handleInput={onPassword} value={password} />
-          <Button primary={true} content="Login" onAction={onLogin}/>
+          <InputText type="text" placeholder="Email" Icon={MdMail} id="email" name="email" handleInput={onEmail} value={data.email}/>
+          <InputText type="password" placeholder="Password" id="password" name="password" Icon={MdLock} handleInput={onPassword} value={data.password} />
+          <Button primary={true} content="Login" onAction={onSubmit}/>
 
 
         <OptionsWrapper>

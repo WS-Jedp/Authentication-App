@@ -1,8 +1,8 @@
 import { useState } from 'react'
 
-type Method = 'POST' | 'GET';
+type Method = 'POST' | 'GET' | 'post' | 'get';
 
-export const useFetch = (type:Method, url:string, data:any = null) => {
+export const useFetch = (type:Method, url:string, requestData:object = {}) => {
 
   const MAIN_URL = 'http://localhost:3000'
   const COMPLETE_URL = `${MAIN_URL}${url}`
@@ -21,9 +21,15 @@ export const useFetch = (type:Method, url:string, data:any = null) => {
     }
 
     // Proccess to make if the method is 'POST'
+    setLoading(true)
+    const formData = new FormData()
+    for (let key in requestData) {
+      formData.append(key, requestData[key])
+    }
+
     const resp = await fetch(COMPLETE_URL, {
       method: type,
-      body: data
+      body: formData
     })
     const dataPost = resp.json()
     setLoading(false);

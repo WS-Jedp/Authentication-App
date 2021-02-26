@@ -6,7 +6,7 @@ import { MenuButtonWrapper } from './styles'
 type PropsMenuButton = {
   content?: string;
   Icon?: IconType;
-  onClick?: React.MouseEvent;
+  onClick?: (ev:any) => void;
 }
 
 export const MenuButton= ({ content, Icon, onClick }:PropsMenuButton) => {
@@ -14,7 +14,7 @@ export const MenuButton= ({ content, Icon, onClick }:PropsMenuButton) => {
 
 
   return (
-    <MenuButtonWrapper>
+    <MenuButtonWrapper onClick={onClick}>
 
       {
         Icon ? <Icon /> : <MdClose /> 
